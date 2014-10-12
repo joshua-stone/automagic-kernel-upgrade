@@ -15,3 +15,11 @@ if [ "${CURRENT_KERNEL##*-}" = "generic" ]; then
 else
   TYPE="lowlatency"
 fi
+
+echo -n "Finding latest kernel .."
+
+URL="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
+HTML="$(wget -q -O - ${URL} | grep href | tail -n 1)"
+
+VERSION="${HTML#*</td><td><a href=\"}"
+VERSION="${VERSION%/\">*}"
