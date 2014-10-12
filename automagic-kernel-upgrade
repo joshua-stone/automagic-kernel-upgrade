@@ -51,3 +51,7 @@ if [ "${INPUT}" != "y" ]; then
   echo "Aborting."
   exit 1
 fi
+
+dpkg -i "${TEMP_DIR}"/*.deb
+
+
