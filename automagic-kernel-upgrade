@@ -7,3 +7,11 @@ if [ "$(uname -i)" = "x86_64" ]; then
 else
   ARCH="i386"
 fi
+
+CURRENT_KERNEL="$(uname -r)"
+
+if [ "${CURRENT_KERNEL##*-}" = "generic" ]; then
+  TYPE="generic"
+else
+  TYPE="lowlatency"
+fi
