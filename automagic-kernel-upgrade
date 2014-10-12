@@ -23,3 +23,12 @@ HTML="$(wget -q -O - ${URL} | grep href | tail -n 1)"
 
 VERSION="${HTML#*</td><td><a href=\"}"
 VERSION="${VERSION%/\">*}"
+
+echo ".. latest version is ${VERSION} for ${ARCH}. Continue? [y/n]"
+
+read INPUT
+
+if [ "${INPUT}" != "y" ]; then
+  echo "Aborting."
+  exit 1
+fi
