@@ -36,3 +36,14 @@ fi
 TEMP_DIR="$(mktemp -d)" || exit 1
 trap 'rm -rf "${TEMP_DIR}"' EXIT
 
+DIRECTORY="${URL}${VERSION}/"
+
+wget -q -O - "${DIRECTORY}" |
+grep -e "all.deb\|${TYPE}.*${ARCH}" |
+cut -d \" -f8 |
+while read LINK; do
+  wget "${DIRECTORY}${LINK}" -P "${TEMP_DIR}"
+done
+
+
+
