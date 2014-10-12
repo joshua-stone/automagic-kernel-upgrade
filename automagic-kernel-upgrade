@@ -54,4 +54,5 @@ fi
 
 dpkg -i "${TEMP_DIR}"/*.deb
 
+echo "Finished installing."
 
