@@ -45,5 +45,9 @@ while read LINK; do
   wget "${DIRECTORY}${LINK}" -P "${TEMP_DIR}"
 done
 
+echo "WARNING: Installing this kernel can break your system. Continue? [y/n]"
 
-
+if [ "${INPUT}" != "y" ]; then
+  echo "Aborting."
+  exit 1
+fi
