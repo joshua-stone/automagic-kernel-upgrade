@@ -2,6 +2,13 @@
 
 set -e
 
+URL="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
+
+get_versions () {
+  URL="${1}"
+  wget -q -O - "${URL}" | grep "href=\"v" | cut -d \" -f8
+}
+
 if [ "$(uname -i)" = "x86_64" ]; then
   ARCH="amd64"
 else
@@ -18,11 +25,7 @@ fi
 
 echo -n "Finding latest kernel .."
 
-URL="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
-HTML="$(wget -q -O - ${URL} | grep href | tail -n 1)"
-
-VERSION="${HTML#*</td><td><a href=\"}"
-VERSION="${VERSION%/\">*}"
+VERSION="$(get_versions "${URL}" | tail -n 1)"
 
 echo ".. latest version is ${VERSION} for ${ARCH}. Continue? [y/n]"
 
@@ -36,7 +39,7 @@ fi
 TEMP_DIR="$(mktemp -d)" || exit 1
 trap 'rm -rf "${TEMP_DIR}"' EXIT
 
-DIRECTORY="${URL}${VERSION}/"
+DIRECTORY="${URL}${VERSION}"
 
 wget -q -O - "${DIRECTORY}" |
 grep -e "all.deb\|${TYPE}.*${ARCH}" |
@@ -46,6 +49,8 @@ while read LINK; do
 done
 
 echo "WARNING: Installing this kernel can break your system. Continue? [y/n]"
+
+read INPUT
 
 if [ "${INPUT}" != "y" ]; then
   echo "Aborting."
