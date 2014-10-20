@@ -77,10 +77,9 @@ if [ "${INCLUDE_RC}" != "true" ]; then
   LINKS="$(echo "${LINKS}" | grep -v "rc")"
 fi
 
-echo "${LINKS}"
 VERSION="$(echo "${LINKS}" | tail -n 1)"
 
-user_warning ".. latest version is ${VERSION} for ${ARCH}. Proceed to download kernel? [y/n]"
+user_warning ".. latest version is ${VERSION%/} for ${ARCH}. Proceed to download kernel? [y/n]"
 
 TEMP_DIR="$(mktemp -d)" || exit 1
 trap 'rm -rf "${TEMP_DIR}"' EXIT
