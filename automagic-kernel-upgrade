@@ -2,7 +2,7 @@
 
 set -e
 
-while getopts ":h" opt; do
+while getopts ":rh" opt; do
   case $opt in
     h)
       echo "A tool for simplifying the install of newer Linux kernels on Ubuntu systems."
@@ -15,6 +15,9 @@ while getopts ":h" opt; do
       echo "Flags available:"
       echo "  -r     Include RC releases as potential upgrade targets"
       exit 1
+      ;;
+    r)
+      INCLUDE_RC="true"
       ;;
     \?)
       echo "Invalid option: -$OPTARG. Aborting" >&2
@@ -68,7 +71,14 @@ fi
 
 echo -n "Finding latest kernel .."
 
-VERSION="$(get_versions "${URL}" | tail -n 1)"
+LINKS="$(get_versions "${URL}")"
+
+if [ "${INCLUDE_RC}" != "true" ]; then
+  LINKS="$(echo "${LINKS}" | grep -v "rc")"
+fi
+
+echo "${LINKS}"
+VERSION="$(echo "${LINKS}" | tail -n 1)"
 
 user_warning ".. latest version is ${VERSION} for ${ARCH}. Proceed to download kernel? [y/n]"
 
