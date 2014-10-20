@@ -2,6 +2,31 @@
 
 set -e
 
+while getopts ":h" opt; do
+  case $opt in
+    h)
+      echo "A tool for simplifying the install of newer Linux kernels on Ubuntu systems."
+      echo
+      echo "Usage: sudo ./automagical-kernel-install"
+      echo
+      echo "Getting help:"
+      echo "  -h     Print basic options available"
+      echo
+      echo "Flags available:"
+      echo "  -r     Include RC releases as potential upgrade targets"
+      exit 1
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG. Aborting" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument. Aborting." >&2
+      exit 1
+      ;;
+  esac
+done
+
 if [ "$(id -u)" -ne 0 ]; then
   echo "ERROR: this program requires superuser privileges. Aborting."
   exit 1
