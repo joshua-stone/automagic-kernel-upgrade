@@ -2,6 +2,11 @@
 
 set -e
 
+# Use a POSIX-friendly way of detecting whether a command is installed
+is_available() {
+  command -v "${1}" > /dev/null 2>&1
+}
+
 while getopts ":rh" opt; do
   case $opt in
     h)
@@ -29,6 +34,10 @@ while getopts ":rh" opt; do
       ;;
   esac
 done
+
+if ! is_available "dpkg"; then
+  echo "Only Debian/Ubuntu-based distros are supported. Aborting."
+fi
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "ERROR: this program requires superuser privileges. Aborting."
